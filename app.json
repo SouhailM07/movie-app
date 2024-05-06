@@ -19,12 +19,18 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      }
+        "foregroundImage": "./assets/movie-app-logo-android.png",
+        "backgroundColor": "#000000"
+      },
+      "package": "com.shadow07.movieapp"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "6a55d73e-6062-405c-a219-60b29d2ba857"
+      }
     }
   }
 }
