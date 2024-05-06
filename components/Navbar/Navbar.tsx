@@ -1,11 +1,11 @@
 import { Text, View } from "react-native";
-import { popularStyles } from "./popularStyles.ts";
+import { navbarStyles } from "./navbarStyles.ts";
 import tw from "../../lib/tailwind.js";
-export default function Popular() {
+export default function Navbar() {
   return (
     <>
       <View>
-        <Text>Popular</Text>
+        <Text>Navbar</Text>
       </View>
     </>
   );
