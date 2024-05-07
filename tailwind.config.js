@@ -6,7 +6,10 @@
   theme: {
     extend: {
       colors:
-        { safeAreaContainerColor: "rgb(30 41 59)", headerColor: "rgb(51 65 85)" }
+      {
+        safeAreaContainerColor: "rgb(30 41 59)",
+        headerColor: "rgb(51 65 85)"
+      }
     }
   },
   plugins: [],

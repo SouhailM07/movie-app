@@ -32,7 +32,9 @@ export default function Navbar() {
           <FontAwesomeIcon icon={faCompactDisc} color={icons_color} />
           <Text style={tw`text-white text-[1.3rem]`}>vies App</Text>
         </View>
-        <FontAwesomeIcon icon={faCircleUser} color={icons_color} size={24} />
+        <Pressable>
+          <FontAwesomeIcon icon={faCircleUser} color={icons_color} size={24} />
+        </Pressable>
       </View>
     </>
   );

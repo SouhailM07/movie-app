@@ -38,7 +38,7 @@ const RendedItem = ({ watch }) => {
   const navigation: any = useNavigation();
   let { editSelectedContent } = selectedContent_store((state) => state);
   const handlePress = () => {
-    editSelectedContent(watch);
+    editSelectedContent(watch.id);
     navigation.navigate("viewContent");
   };
   return (

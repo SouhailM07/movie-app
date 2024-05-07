@@ -3,17 +3,21 @@ import {
   Image,
   Text,
   TouchableOpacity,
+  ScrollView,
   View,
   SafeAreaView,
 } from "react-native";
 import { selectedcontentStyles } from "./selectedcontentStyles.ts";
 import tw from "../../lib/tailwind.js";
 import selectedContent_store from "../../zustand/selectedContent_store.js";
+import axios from "axios";
+import { useState, useEffect } from "react";
 // ? types
 import { btnsPanel_t } from "../../types/index.ts";
 // assets
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import {
+  faCircle,
   faHeart,
   faPlay,
   faPlus,
@@ -27,19 +31,46 @@ import {
 export default function SelectedContent() {
   // main vars
   let { selectedContent } = selectedContent_store((state) => state);
-  const { backdrop_path, original_name, original_title, overview } =
-    selectedContent;
+  let [contentApi, setContentApi]: any = useState({});
+  const {
+    backdrop_path,
+    original_name,
+    original_title,
+    overview,
+    genres,
+    release_date,
+    vote_average,
+    popularity,
+    runtime,
+  } = contentApi;
   //
+  useEffect(() => {
+    axios
+      .get(
+        `https://api.themoviedb.org/3/movie/${selectedContent}?include_adult=false?&api_key=${process.env.EXPO_PUBLIC_API_KEY}`
+      )
+      .then((res) => setContentApi(res.data))
+      .catch((err) => console.log(`err:${err}`));
+  }, []);
   return (
     <>
       <SafeAreaView style={tw`${globalStyles.safe_area_container}`}>
-        <ContentBackground bg={backdrop_path} />
-        <View style={tw`px-2 gap-y-4`}>
-          <ContentTitle title1={original_name} title2={original_title} />
-          <Text style={tw`text-white leading-[1.4rem]`}>{overview}</Text>
-          <ContentTrailerBtn />
-          <ContentBtnsPanel />
-        </View>
+        <ScrollView contentContainerStyle={tw`pb-[1rem]`}>
+          <ContentBackground bg={backdrop_path} />
+          <View style={tw`px-2 gap-y-4`}>
+            <ContentTitle title1={original_name} title2={original_title} />
+            <ContentGenres genres={genres} />
+            <Text style={tw`text-white leading-[1.4rem]`}>{overview}</Text>
+            <Details
+              release_date={release_date}
+              runtime={runtime}
+              vote_average={vote_average}
+              popularity={popularity}
+            />
+            <ContentTrailerBtn />
+            <ContentBtnsPanel />
+          </View>
+        </ScrollView>
       </SafeAreaView>
     </>
   );
@@ -48,6 +79,48 @@ export default function SelectedContent() {
 /*==============================================================================================*/
 // small components section
 /*==============================================================================================*/
+
+const Details = ({ release_date, vote_average, runtime, popularity }) => {
+  return (
+    <View style={tw`flex-row justify-between items-center `}>
+      <View style={tw`gap-y-[0.5rem]`}>
+        <Text style={tw`text-white font-bold`}>
+          Release date: {release_date}
+        </Text>
+        <Text style={tw`text-white font-bold`}>popularity : {popularity}</Text>
+        <Text style={tw`text-white font-bold`}>duration: {runtime}</Text>
+      </View>
+      <VoteAverage vote_average={vote_average} />
+    </View>
+  );
+};
+
+const VoteAverage = ({ vote_average }) => {
+  return (
+    <View
+      style={tw`border-4 border-green-400 p-2 bg-slate-700 w-[3.5rem] aspect-square rounded-full items-center justify-center`}
+    >
+      <Text style={tw`text-white font-bold text-[1rem]`}>
+        {(vote_average * 10).toFixed(0)}%
+      </Text>
+    </View>
+  );
+};
+
+const ContentGenres = ({ genres }) => {
+  return (
+    <View style={tw`flex-row gap-x-[1rem]`}>
+      {genres?.map(({ name }, i) => {
+        return (
+          <View key={i} style={tw`flex-row items-center gap-x-[0.5rem]`}>
+            <FontAwesomeIcon icon={faCircle} color="white" size={7} />
+            <Text style={tw`text-white text-[1rem] font-medium`}>{name}</Text>
+          </View>
+        );
+      })}
+    </View>
+  );
+};
 
 const ContentBackground = ({ bg }) => {
   return (

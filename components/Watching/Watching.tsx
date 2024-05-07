@@ -50,7 +50,6 @@ export default function Watching({ title, apiUrl }) {
           <TouchableOpacity
             onPress={() => {
               editSelectedMoreContent({ title, apiUrl });
-              // console.log(selectedMoreContent);
               navigation.navigate("seeMore");
             }}
           >
@@ -73,7 +72,7 @@ const RendedItem = ({ watch }) => {
   const navigation: any = useNavigation();
   let { editSelectedContent } = selectedContent_store((state) => state);
   const handlePress = () => {
-    editSelectedContent(watch);
+    editSelectedContent(watch.id);
     navigation.navigate("viewContent");
   };
   return (
