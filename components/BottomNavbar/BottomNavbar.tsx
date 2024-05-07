@@ -9,7 +9,6 @@ import {
   faClockRotateLeft,
   faHeart,
   faHome,
-  faPlus,
   faSearch,
 } from "@fortawesome/free-solid-svg-icons";
 import WatchList from "../WatchList/WatchList.tsx";

@@ -11,5 +11,6 @@ export interface onboardingPages_t {
 export interface btnsPanel_t {
   icon: IconDefinition;
   label: string;
+  color?: string;
 }
 [];

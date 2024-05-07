@@ -1,9 +1,8 @@
-import { SafeAreaView, Text, View } from "react-native";
+import { SafeAreaView } from "react-native";
 import { mycontainerStyles } from "./mycontainerStyles.ts";
 import tw from "../../lib/tailwind.js";
 // components
 import MyOnboarding from "../MyOnboarding/MyOnboarding.tsx";
-import Home from "../Home/Home.tsx";
 import SeeMore from "../SeeMore/SeeMore.tsx";
 import SelectedContent from "../SelectedContent/SelectedContent.tsx";
 //
