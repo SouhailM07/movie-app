@@ -9,6 +9,7 @@ import {
   SafeAreaView,
   Pressable,
   Image,
+  TouchableOpacity,
 } from "react-native";
 //
 import tw from "../../lib/tailwind.js";
@@ -16,6 +17,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
 import selectedContent_store from "../../zustand/selectedContent_store.js";
+import searchResults_store from "../../zustand/searchResults_store.js";
 // assets
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
@@ -29,11 +31,13 @@ const { width } = Dimensions.get("window");
 export default function SearchPanel() {
   // main vars
   let [searchTxt, setSearchTxt] = useState<string>("");
-  let [content, setContent]: any = useState([]);
+  let { searchResults, editSearchResults } = searchResults_store(
+    (state) => state
+  );
   const BASE_URL = "https://api.themoviedb.org/3/discover/";
   //
   useEffect(() => {
-    fetchData({ searchTxt, setContent, BASE_URL });
+    fetchData({ searchTxt, editSearchResults, BASE_URL });
   }, [searchTxt]);
   //
   return (
@@ -41,11 +45,11 @@ export default function SearchPanel() {
       <SafeAreaView style={tw`${globalStyles.safe_area_container} p-1`}>
         <SearchInput txt={searchTxt} editTxt={setSearchTxt} />
         {/*  */}
-        {searchTxt && content.length !== 0 ? (
+        {searchTxt && searchResults.length !== 0 ? (
           <FlatList
             showsHorizontalScrollIndicator={false}
-            data={content}
-            contentContainerStyle={tw`gap-y-[1rem]`}
+            data={searchResults}
+            contentContainerStyle={tw`gap-y-[1rem] pb-[6rem] `}
             renderItem={({ item }: { item: any }): any => {
               return <RendedItem watch={item} />;
             }}
@@ -67,6 +71,10 @@ export default function SearchPanel() {
 /*===============================================================================================*/
 
 const SearchInput = ({ txt, editTxt }) => {
+  // main vars
+  let navigation: any = useNavigation();
+  // handlers
+  const handlePress = () => txt && navigation.navigate("searchResults");
   return (
     <View
       style={tw` border-2 h-[2.8rem] my-[1rem] border-gray-300 w-[90%] mx-auto rounded-full flex-row justify-between items-center `}
@@ -76,9 +84,12 @@ const SearchInput = ({ txt, editTxt }) => {
         value={txt}
         onChangeText={(text) => editTxt(text)}
       />
-      <Pressable style={tw` w-[20%] border-white items-center justify-center`}>
+      <TouchableOpacity
+        onPress={handlePress}
+        style={tw` w-[20%] border-white items-center justify-center`}
+      >
         <FontAwesomeIcon icon={faSearch} color="white" />
-      </Pressable>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -117,7 +128,7 @@ const RendedItem = ({ watch }) => {
 // helpers section
 /*===============================================================================================*/
 
-const fetchData = async ({ searchTxt, BASE_URL, setContent }) => {
+const fetchData = async ({ searchTxt, BASE_URL, editSearchResults }) => {
   try {
     const movieRes = await axios.get(
       `${BASE_URL}movie?include_adult=false&api_key=${process.env.EXPO_PUBLIC_API_KEY}`
@@ -138,7 +149,7 @@ const fetchData = async ({ searchTxt, BASE_URL, setContent }) => {
         e.original_name?.toLowerCase().includes(searchTxt.toLowerCase())
     );
 
-    setContent([...movieArr, ...tvArr]);
+    editSearchResults([...movieArr, ...tvArr]);
   } catch (err) {
     console.log(`Error: ${err}`);
   }

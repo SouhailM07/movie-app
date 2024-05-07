@@ -10,6 +10,7 @@ import MyOnboarding from "../MyOnboarding/MyOnboarding.tsx";
 import SeeMore from "../SeeMore/SeeMore.tsx";
 import SelectedContent from "../SelectedContent/SelectedContent.tsx";
 import BottomNavbar from "../BottomNavbar/BottomNavbar.tsx";
+import SearchResults from "../SearchResults/SearchResults.tsx";
 //
 
 /*===============================================================================================*/
@@ -36,6 +37,17 @@ export default function MyContainer() {
               options={{
                 headerShown: true,
                 headerTitle: selectedMoreContent?.title,
+                headerStyle: { backgroundColor: "rgb(51 65 85)" },
+                headerTitleStyle: { color: "white" },
+                headerTintColor: "red",
+              }}
+            />
+            <Stack.Screen
+              name="searchResults"
+              component={SearchResults}
+              options={{
+                headerShown: true,
+                headerTitle: "Search Results",
                 headerStyle: { backgroundColor: "rgb(51 65 85)" },
                 headerTitleStyle: { color: "white" },
                 headerTintColor: "red",
