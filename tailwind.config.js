@@ -3,6 +3,11 @@
     "./App.{js,jsx,ts,tsx}",
     "./<custom directory>/**/*.{js,jsx,ts,tsx}",
   ],
-  theme: { extend: {} },
+  theme: {
+    extend: {
+      colors:
+        { safeAreaContainerColor: "rgb(30 41 59)", headerColor: "rgb(51 65 85)" }
+    }
+  },
   plugins: [],
 };

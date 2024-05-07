@@ -1,28 +1,34 @@
+import { globalStyles } from "../../globalStyles.ts";
 import { SafeAreaView } from "react-native";
 import { mycontainerStyles } from "./mycontainerStyles.ts";
 import tw from "../../lib/tailwind.js";
+import seeMore_store from "../../zustand/seeMore_store.js";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { NavigationContainer } from "@react-navigation/native";
 // components
 import MyOnboarding from "../MyOnboarding/MyOnboarding.tsx";
 import SeeMore from "../SeeMore/SeeMore.tsx";
 import SelectedContent from "../SelectedContent/SelectedContent.tsx";
-//
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { NavigationContainer } from "@react-navigation/native";
-const Stack = createNativeStackNavigator();
-import seeMore_store from "../../zustand/seeMore_store.js";
 import BottomNavbar from "../BottomNavbar/BottomNavbar.tsx";
+//
+
+/*===============================================================================================*/
+// main component section
+/*===============================================================================================*/
+
+const Stack = createNativeStackNavigator();
 
 export default function MyContainer() {
   const { selectedMoreContent } = seeMore_store((state) => state);
   return (
     <>
-      <SafeAreaView style={tw`min-h-full w-full bg-slate-800 `}>
+      <SafeAreaView style={tw`${globalStyles.safe_area_container} `}>
         <NavigationContainer>
           <Stack.Navigator screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="primeHome">
+            <Stack.Screen name="welcoming" component={MyOnboarding} />
+            <Stack.Screen name="tabsHome">
               {() => <BottomNavbar />}
             </Stack.Screen>
-            <Stack.Screen name="welcoming" component={MyOnboarding} />
             <Stack.Screen name="viewContent" component={SelectedContent} />
             <Stack.Screen
               name="seeMore"

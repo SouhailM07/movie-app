@@ -1,20 +1,19 @@
 import { SafeAreaView, ScrollView, View, Text } from "react-native";
 import { homeStyles } from "./homeStyles.ts";
 import tw from "../../lib/tailwind.js";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 // components
 import Watching from "../Watching/Watching.tsx";
 import Navbar from "../Navbar/Navbar.tsx";
+import Sidebar from "../Sidebar/Sidebar.tsx";
 
 //
 const Drawer = createDrawerNavigator();
-const Stack = createNativeStackNavigator();
 export default function Home() {
   return (
-    <Drawer.Navigator>
+    <Drawer.Navigator drawerContent={() => <Sidebar />}>
       <Drawer.Screen
-        name="mainHome"
+        name="drawerHome"
         component={MainHome}
         options={{
           header: (props) => <Navbar />,

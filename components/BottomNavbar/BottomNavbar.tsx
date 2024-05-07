@@ -1,23 +1,34 @@
-import { Text, View } from "react-native";
 import { bottomnavbarStyles } from "./bottomnavbarStyles.ts";
 import tw from "../../lib/tailwind.js";
-//
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+// components
 import Home from "../Home/Home.tsx";
+import WatchList from "../WatchList/WatchList.tsx";
+import FavoriteList from "../FavoriteList/FavoriteList.tsx";
+import SearchPanel from "../SearchPanel/SearchPanel.tsx";
+// assets
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import {
   faClockRotateLeft,
   faHeart,
   faHome,
   faSearch,
 } from "@fortawesome/free-solid-svg-icons";
-import WatchList from "../WatchList/WatchList.tsx";
-import FavoriteList from "../FavoriteList/FavoriteList.tsx";
-import SearchPanel from "../SearchPanel/SearchPanel.tsx";
 
 const Tab = createBottomTabNavigator();
 
 export default function BottomNavbar() {
+  interface bottomNavRoutes_t {
+    name: string;
+    title: string;
+    component: () => React.JSX.Element;
+  }
+  const bottomNavRoutes: bottomNavRoutes_t[] = [
+    { name: "home", title: "Home", component: Home },
+    { name: "search", title: "Search", component: SearchPanel },
+    { name: "watchList", title: "Later", component: WatchList },
+    { name: "favoriteList", title: "Favorite", component: FavoriteList },
+  ];
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -45,22 +56,9 @@ export default function BottomNavbar() {
         tabBarInactiveTintColor: "white",
       })}
     >
-      <Tab.Screen options={{ title: "Home" }} name="home" component={Home} />
-      <Tab.Screen
-        options={{ title: "Search" }}
-        name="search"
-        component={SearchPanel}
-      />
-      <Tab.Screen
-        options={{ title: "Later" }}
-        name="watchList"
-        component={WatchList}
-      />
-      <Tab.Screen
-        options={{ title: "Favorite" }}
-        name="favoriteList"
-        component={FavoriteList}
-      />
+      {bottomNavRoutes.map((e, i) => (
+        <Tab.Screen key={i} options={{ title: e.title }} {...e} />
+      ))}
     </Tab.Navigator>
   );
 }

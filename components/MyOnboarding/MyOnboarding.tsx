@@ -37,10 +37,11 @@ const onboardingPages: onboardingPages_t[] = [
 /*===============================================================================================*/
 // main component section
 /*===============================================================================================*/
+
 export default function MyOnboarding() {
   const navigation: any = useNavigation();
   const handleDone = () => {
-    navigation.navigate("primeHome");
+    navigation.navigate("tabsHome");
     // add react async storage
   };
   return (
