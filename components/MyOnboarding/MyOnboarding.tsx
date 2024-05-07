@@ -40,7 +40,7 @@ const onboardingPages: onboardingPages_t[] = [
 export default function MyOnboarding() {
   const navigation: any = useNavigation();
   const handleDone = () => {
-    navigation.navigate("home");
+    navigation.navigate("primeHome");
     // add react async storage
   };
   return (

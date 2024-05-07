@@ -1,10 +1,10 @@
 import {
   Text,
-  View,
   Image,
   Dimensions,
   SafeAreaView,
   ScrollView,
+  Pressable,
 } from "react-native";
 import { seemoreStyles } from "./seemoreStyles.ts";
 import tw from "../../lib/tailwind.js";
@@ -14,14 +14,12 @@ import { useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 const { width } = Dimensions.get("window");
 import seeMore_store from "../../zustand/seeMore_store.js";
+import selectedContent_store from "../../zustand/selectedContent_store.js";
 
 export default function SeeMore() {
   // main states
   let [content, setContent]: any = useState([]);
-  const navigation: any = useNavigation();
-  let { editSelectedMoreContent, selectedMoreContent } = seeMore_store(
-    (state) => state
-  );
+  let { selectedMoreContent } = seeMore_store((state) => state);
   const { apiUrl } = selectedMoreContent;
   //
   useEffect(() => {
@@ -35,7 +33,7 @@ export default function SeeMore() {
     <>
       <SafeAreaView style={tw`min-h-full  w-full bg-slate-800 px-2`}>
         <ScrollView
-          contentContainerStyle={tw`min-w-full min-h-[19rem] my-[1rem] flex-row flex-wrap gap-y-[1rem] gap-x-[0.8rem] justify-between`}
+          contentContainerStyle={tw`min-w-full pb-[2rem] my-[1rem] flex-row flex-wrap gap-y-[1rem] gap-x-[0.8rem] justify-between`}
         >
           {content.map((e, i) => {
             return <RendedItem key={i} watch={e} />;
@@ -46,8 +44,14 @@ export default function SeeMore() {
   );
 }
 const RendedItem = ({ watch }) => {
+  const navigation: any = useNavigation();
+  let { editSelectedContent } = selectedContent_store((state) => state);
+  const handlePress = () => {
+    editSelectedContent(watch);
+    navigation.navigate("viewContent");
+  };
   return (
-    <View style={tw`w-[${width / 4 / 3.5}] `}>
+    <Pressable onPress={handlePress} style={tw`w-[${width / 4 / 3.5}] `}>
       <Image
         style={tw`rounded-xl w-full h-[${(width / 4 / 3) * 1.7}]`}
         source={{
@@ -59,9 +63,8 @@ const RendedItem = ({ watch }) => {
         ellipsizeMode="tail"
         style={tw`text-white font-medium mt-5`}
       >
-        {watch?.original_title}
-        {watch?.original_name}
+        {watch?.original_title || watch?.original_name}
       </Text>
-    </View>
+    </Pressable>
   );
 };

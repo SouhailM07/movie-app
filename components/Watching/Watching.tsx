@@ -5,6 +5,7 @@ import {
   Dimensions,
   FlatList,
   TouchableOpacity,
+  Pressable,
 } from "react-native";
 import { watchingStyles } from "./watchingStyles.ts";
 import tw from "../../lib/tailwind.js";
@@ -14,6 +15,7 @@ import { useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 const { width } = Dimensions.get("window");
 import seeMore_store from "../../zustand/seeMore_store.js";
+import selectedContent_store from "../../zustand/selectedContent_store.js";
 
 /*===============================================================================================*/
 // main component section
@@ -68,8 +70,17 @@ export default function Watching({ title, apiUrl }) {
   );
 }
 const RendedItem = ({ watch }) => {
+  const navigation: any = useNavigation();
+  let { editSelectedContent } = selectedContent_store((state) => state);
+  const handlePress = () => {
+    editSelectedContent(watch);
+    navigation.navigate("viewContent");
+  };
   return (
-    <View style={tw`w-[${width / 4 / 3}] mx-[0.6rem]`}>
+    <Pressable
+      onPress={handlePress}
+      style={tw`w-[${width / 4 / 3}] mx-[0.6rem]`}
+    >
       <Image
         style={tw`rounded-xl w-full h-[${(width / 4 / 3) * 1.7}]`}
         source={{
@@ -84,6 +95,6 @@ const RendedItem = ({ watch }) => {
         {watch?.original_title}
         {watch?.original_name}
       </Text>
-    </View>
+    </Pressable>
   );
 };

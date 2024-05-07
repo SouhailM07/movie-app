@@ -1,3 +1,5 @@
+import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
+
 export interface onboardingPages_t {
   backgroundColor: string;
   title: string;
@@ -5,3 +7,9 @@ export interface onboardingPages_t {
   subtitle: string;
   loop: boolean;
 }
+
+export interface btnsPanel_t {
+  icon: IconDefinition;
+  label: string;
+}
+[];
