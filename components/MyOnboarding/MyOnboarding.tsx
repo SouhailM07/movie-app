@@ -8,6 +8,8 @@ import { onboardingPages_t } from "../../types/index.ts";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import { useNavigation } from "@react-navigation/native";
+import onboarding_store from "../../zustand/onboarding_store.js";
+import { useEffect } from "react";
 // main vars
 const { width } = Dimensions.get("window");
 const onboardingPages: onboardingPages_t[] = [
@@ -40,10 +42,17 @@ const onboardingPages: onboardingPages_t[] = [
 
 export default function MyOnboarding() {
   const navigation: any = useNavigation();
+  let { editWelcomed } = onboarding_store((state) => state);
   const handleDone = () => {
+    editWelcomed(true);
     navigation.navigate("tabsHome");
-    // add react async storage
   };
+  let { welcomed } = onboarding_store((state) => state);
+  useEffect(() => {
+    if (welcomed) {
+      navigation.navigate("tabsHome");
+    }
+  }, []);
   return (
     <>
       <SafeAreaView style={tw`min-h-full w-full`}>

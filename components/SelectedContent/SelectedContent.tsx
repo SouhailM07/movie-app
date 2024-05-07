@@ -17,12 +17,14 @@ import { btnsPanel_t } from "../../types/index.ts";
 // assets
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import {
+  faCheck,
   faCircle,
   faHeart,
   faPlay,
   faPlus,
   faShare,
 } from "@fortawesome/free-solid-svg-icons";
+import watchList_store from "../../zustand/watchList_store.js";
 
 /*==============================================================================================*/
 // main component section
@@ -42,6 +44,7 @@ export default function SelectedContent() {
     vote_average,
     popularity,
     runtime,
+    id,
   } = contentApi;
   //
   useEffect(() => {
@@ -68,7 +71,7 @@ export default function SelectedContent() {
               popularity={popularity}
             />
             <ContentTrailerBtn />
-            <ContentBtnsPanel />
+            <ContentBtnsPanel contentId={id} />
           </View>
         </ScrollView>
       </SafeAreaView>
@@ -151,17 +154,30 @@ const ContentTrailerBtn = () => {
   );
 };
 
-const ContentBtnsPanel = () => {
+const ContentBtnsPanel = ({ contentId }) => {
+  // ! handlers
+  let { watchList, updateWatchList } = watchList_store((state) => state);
+
+  //
   const btnsPanel: btnsPanel_t[] = [
-    { icon: faPlay, label: "play", color: "#4ADE80" },
-    { icon: faPlus, label: "list", color: "#fff" },
-    { icon: faShare, label: "share", color: "#EAB308" },
-    { icon: faHeart, label: "like", color: "#EF4444" },
+    { icon: faPlay, label: "play", color: "#4ADE80", handler: () => {} },
+    {
+      icon: !watchList.includes(contentId) ? faPlus : faCheck,
+      label: "list",
+      color: "#fff",
+      handler: updateWatchList,
+    },
+    { icon: faShare, label: "share", color: "#EAB308", handler: () => {} },
+    { icon: faHeart, label: "like", color: "#EF4444", handler: () => {} },
   ];
   return (
     <View style={tw`${selectedcontentStyles.ContentBtnsPanel_container}`}>
-      {btnsPanel.map(({ icon, label, color }, i) => (
-        <TouchableOpacity key={i} style={tw` items-center gap-y-[1rem]`}>
+      {btnsPanel.map(({ icon, label, color, handler }, i) => (
+        <TouchableOpacity
+          onPress={() => handler(contentId)}
+          key={i}
+          style={tw` items-center gap-y-[1rem]`}
+        >
           <View style={tw`border border-[${color!}] rounded-lg p-4`}>
             <FontAwesomeIcon icon={icon} color={color!} />
           </View>

@@ -16,6 +16,7 @@ import { useNavigation } from "@react-navigation/native";
 const { width } = Dimensions.get("window");
 import seeMore_store from "../../zustand/seeMore_store.js";
 import selectedContent_store from "../../zustand/selectedContent_store.js";
+import filters_store from "../../zustand/filters_store.js";
 
 /*===============================================================================================*/
 // main component section
@@ -27,20 +28,25 @@ export default function Watching({ title, apiUrl }) {
   // main states
   let [content, setContent]: any = useState([]);
   const navigation: any = useNavigation();
+  let { en, includingVideo } = filters_store((state) => state);
   let { editSelectedMoreContent, selectedMoreContent } = seeMore_store(
     (state) => state
   );
   //
   useEffect(() => {
+    //
     axios["get"](
-      `https://api.themoviedb.org/3/${apiUrl}?include_adult=false?&api_key=${process.env.EXPO_PUBLIC_API_KEY}`
+      `https://api.themoviedb.org/3/${apiUrl}?include_adult=false&include_video=${includingVideo}${
+        en && "&language=en-US"
+      }?&api_key=${process.env.EXPO_PUBLIC_API_KEY}`
     )
       ["then"]((res) => setContent(res.data.results))
       ["catch"]((err) => console.log(`err:${err}`));
-  }, []);
+    // console.log("check rendering [watching]");
+  }, [en, includingVideo]);
   return (
     <>
-      <View style={tw`min-w-full min-h-[19rem]`}>
+      <View style={[tw`min-w-full min-h-[19rem]`]}>
         <View
           style={tw`mb-[1rem] mx-[0.6rem] flex-row justify-between items-center`}
         >

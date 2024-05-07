@@ -20,23 +20,41 @@ const Tab = createBottomTabNavigator();
 export default function BottomNavbar() {
   interface bottomNavRoutes_t {
     name: string;
-    title: string;
+    options: { title: string; headerShown: boolean };
     component: () => React.JSX.Element;
   }
   const bottomNavRoutes: bottomNavRoutes_t[] = [
-    { name: "home", title: "Home", component: Home },
-    { name: "search", title: "Search", component: SearchPanel },
-    { name: "watchList", title: "Later", component: WatchList },
-    { name: "favoriteList", title: "Favorite", component: FavoriteList },
+    // { title: e.title, headerShown: e.showHeader }
+    {
+      name: "home",
+      component: Home,
+      options: { title: "Home", headerShown: false },
+    },
+    {
+      name: "search",
+      options: { title: "Search", headerShown: false },
+      component: SearchPanel,
+    },
+    {
+      name: "watchList",
+      options: { title: "Later", headerShown: true },
+      component: WatchList,
+    },
+    {
+      name: "favoriteList",
+      options: { title: "Favorite", headerShown: true },
+      component: FavoriteList,
+    },
   ];
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
+        headerStyle: { backgroundColor: "rgb(51 65 85)" },
+        headerTitleStyle: { color: "white" },
         tabBarStyle: {
           backgroundColor: "rgb(51 65 85)",
           borderTopWidth: 0,
         },
-        headerShown: false,
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
           size = 22;
@@ -57,7 +75,7 @@ export default function BottomNavbar() {
       })}
     >
       {bottomNavRoutes.map((e, i) => (
-        <Tab.Screen key={i} options={{ title: e.title }} {...e} />
+        <Tab.Screen key={i} {...e} />
       ))}
     </Tab.Navigator>
   );

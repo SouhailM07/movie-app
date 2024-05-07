@@ -1,4 +1,4 @@
-import { SafeAreaView, ScrollView, View, Text } from "react-native";
+import { SafeAreaView, ScrollView } from "react-native";
 import { homeStyles } from "./homeStyles.ts";
 import tw from "../../lib/tailwind.js";
 import { createDrawerNavigator } from "@react-navigation/drawer";
@@ -35,7 +35,7 @@ let MainHome = () => {
   return (
     <SafeAreaView style={tw`min-h-full w-full bg-slate-800`}>
       <ScrollView
-        contentContainerStyle={tw`pt-[2rem] pb-[4rem]  gap-y-[1.8rem]`}
+        contentContainerStyle={tw`pt-[2rem] pb-[4rem]  gap-y-[1.4rem]`}
         style={tw`min-h-full`}
       >
         {arr.map((e, i) => {

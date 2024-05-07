@@ -2,15 +2,28 @@ import { Text, View, Switch, Pressable } from "react-native";
 import { sidebarStyles } from "./sidebarStyles.ts";
 import tw from "../../lib/tailwind.js";
 import { globalStyles } from "../../globalStyles.ts";
-import { useState } from "react";
+import filters_store from "../../zustand/filters_store.js";
+
+interface arrOfOptions_t {
+  label: string;
+  st: boolean;
+  editSt: any;
+}
+
 export default function Sidebar() {
-  interface arrOfOptions_t {
-    label: string;
-  }
+  // main vars
+  let { en, editEn, includingVideo, editIncludingVideo } = filters_store(
+    (state) => state
+  );
   const arrOfOptions: arrOfOptions_t[] = [
-    { label: "en-US Only" },
-    { label: "Including Video" },
+    { label: "en-US Only", st: en, editSt: editEn },
+    {
+      label: "Including Video",
+      st: includingVideo,
+      editSt: editIncludingVideo,
+    },
   ];
+  //
   return (
     <>
       <View style={tw`${globalStyles.safe_area_container} p-[2rem]`}>
@@ -23,11 +36,10 @@ export default function Sidebar() {
   );
 }
 
-const Option = ({ label }: { label: string }) => {
-  let [toggleOption, setToggleOption] = useState<boolean>(false);
+const Option = ({ label, st, editSt }: arrOfOptions_t) => {
   // ! handlers
   const handlePress = () => {
-    setToggleOption(!toggleOption);
+    editSt(!st);
   };
   return (
     <Pressable
@@ -36,7 +48,7 @@ const Option = ({ label }: { label: string }) => {
     >
       <Text style={tw`text-white font-medium text-[1rem] `}>{label}</Text>
       <Switch
-        value={toggleOption}
+        value={st}
         onValueChange={handlePress}
         trackColor={{ false: "#767577", true: "#81b0ff" }}
       />

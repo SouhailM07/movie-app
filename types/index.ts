@@ -12,5 +12,6 @@ export interface btnsPanel_t {
   icon: IconDefinition;
   label: string;
   color?: string;
+  handler?: any;
 }
 [];
