@@ -11,9 +11,13 @@ import { selectedcontentStyles } from "./selectedcontentStyles.ts";
 import tw from "../../lib/tailwind.js";
 import selectedContent_store from "../../zustand/selectedContent_store.js";
 import axios from "axios";
-import { useState, useEffect, useLayoutEffect } from "react";
+import { useState, useLayoutEffect } from "react";
 // ? types
 import { btnsPanel_t } from "../../types/index.ts";
+// zustand stores
+import watchList_store from "../../zustand/watchList_store.js";
+import loading_store from "../../zustand/loading_store.js";
+import favoriteList_store from "../../zustand/favoriteList_store.js";
 // assets
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import {
@@ -24,8 +28,6 @@ import {
   faPlus,
   faShare,
 } from "@fortawesome/free-solid-svg-icons";
-import watchList_store from "../../zustand/watchList_store.js";
-import loading_store from "../../zustand/loading_store.js";
 
 /*==============================================================================================*/
 // main component section
@@ -48,7 +50,7 @@ export default function SelectedContent() {
     id,
   } = contentApi;
   //
-  const { editLoading } = loading_store((state) => state);
+  const { loading, editLoading } = loading_store((state) => state);
   useLayoutEffect(() => {
     editLoading(true);
     axios
@@ -64,22 +66,24 @@ export default function SelectedContent() {
   return (
     <>
       <SafeAreaView style={tw`${globalStyles.safe_area_container}`}>
-        <ScrollView contentContainerStyle={tw`pb-[1rem]`}>
-          <ContentBackground bg={backdrop_path} />
-          <View style={tw`px-2 gap-y-4`}>
-            <ContentTitle title1={original_name} title2={original_title} />
-            <ContentGenres genres={genres} />
-            <Text style={tw`text-white leading-[1.4rem]`}>{overview}</Text>
-            <Details
-              release_date={release_date}
-              runtime={runtime}
-              vote_average={vote_average}
-              popularity={popularity}
-            />
-            <ContentTrailerBtn />
-            <ContentBtnsPanel contentId={id} />
-          </View>
-        </ScrollView>
+        {!loading && (
+          <ScrollView contentContainerStyle={tw`pb-[1rem]`}>
+            <ContentBackground bg={backdrop_path} />
+            <View style={tw`px-2 gap-y-4`}>
+              <ContentTitle title1={original_name} title2={original_title} />
+              <ContentGenres genres={genres} />
+              <Text style={tw`text-white leading-[1.4rem]`}>{overview}</Text>
+              <Details
+                release_date={release_date}
+                runtime={runtime}
+                vote_average={vote_average}
+                popularity={popularity}
+              />
+              <ContentTrailerBtn />
+              <ContentBtnsPanel contentId={id} />
+            </View>
+          </ScrollView>
+        )}
       </SafeAreaView>
     </>
   );
@@ -163,6 +167,9 @@ const ContentTrailerBtn = () => {
 const ContentBtnsPanel = ({ contentId }) => {
   // ! handlers
   let { watchList, updateWatchList } = watchList_store((state) => state);
+  let { favoriteList, updateFavoriteList } = favoriteList_store(
+    (state) => state
+  );
 
   //
   const btnsPanel: btnsPanel_t[] = [
@@ -174,7 +181,12 @@ const ContentBtnsPanel = ({ contentId }) => {
       handler: updateWatchList,
     },
     { icon: faShare, label: "share", color: "#EAB308", handler: () => {} },
-    { icon: faHeart, label: "like", color: "#EF4444", handler: () => {} },
+    {
+      icon: faHeart,
+      label: "like",
+      color: favoriteList.includes(contentId) ? "#EF4444" : "#fff",
+      handler: updateFavoriteList,
+    },
   ];
   return (
     <View style={tw`${selectedcontentStyles.ContentBtnsPanel_container}`}>

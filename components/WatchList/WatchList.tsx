@@ -10,7 +10,7 @@ import { watchlistStyles } from "./watchlistStyles.ts";
 import tw from "../../lib/tailwind.js";
 import watchList_store from "../../zustand/watchList_store.js";
 import axios from "axios";
-import { useState, useEffect, useLayoutEffect } from "react";
+import { useState, useLayoutEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 import selectedContent_store from "../../zustand/selectedContent_store.js";
 import loading_store from "../../zustand/loading_store.js";
