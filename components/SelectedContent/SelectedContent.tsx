@@ -11,7 +11,7 @@ import { selectedcontentStyles } from "./selectedcontentStyles.ts";
 import tw from "../../lib/tailwind.js";
 import selectedContent_store from "../../zustand/selectedContent_store.js";
 import axios from "axios";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useLayoutEffect } from "react";
 // ? types
 import { btnsPanel_t } from "../../types/index.ts";
 // assets
@@ -25,6 +25,7 @@ import {
   faShare,
 } from "@fortawesome/free-solid-svg-icons";
 import watchList_store from "../../zustand/watchList_store.js";
+import loading_store from "../../zustand/loading_store.js";
 
 /*==============================================================================================*/
 // main component section
@@ -47,12 +48,17 @@ export default function SelectedContent() {
     id,
   } = contentApi;
   //
-  useEffect(() => {
+  const { editLoading } = loading_store((state) => state);
+  useLayoutEffect(() => {
+    editLoading(true);
     axios
       .get(
         `https://api.themoviedb.org/3/movie/${selectedContent}?include_adult=false?&api_key=${process.env.EXPO_PUBLIC_API_KEY}`
       )
-      .then((res) => setContentApi(res.data))
+      .then((res) => {
+        setContentApi(res.data);
+        editLoading(false);
+      })
       .catch((err) => console.log(`err:${err}`));
   }, []);
   return (

@@ -17,6 +17,7 @@ const { width } = Dimensions.get("window");
 import seeMore_store from "../../zustand/seeMore_store.js";
 import selectedContent_store from "../../zustand/selectedContent_store.js";
 import filters_store from "../../zustand/filters_store.js";
+import loading_store from "../../zustand/loading_store.js";
 
 /*===============================================================================================*/
 // main component section
@@ -28,6 +29,7 @@ export default function Watching({ title, apiUrl }) {
   // main states
   let [content, setContent]: any = useState([]);
   const navigation: any = useNavigation();
+  const { editLoading } = loading_store((state) => state);
   let { en, includingVideo } = filters_store((state) => state);
   let { editSelectedMoreContent, selectedMoreContent } = seeMore_store(
     (state) => state
@@ -35,12 +37,16 @@ export default function Watching({ title, apiUrl }) {
   //
   useEffect(() => {
     //
+    editLoading(true);
     axios["get"](
       `https://api.themoviedb.org/3/${apiUrl}?include_adult=false&include_video=${includingVideo}${
         en && "&language=en-US"
       }?&api_key=${process.env.EXPO_PUBLIC_API_KEY}`
     )
-      ["then"]((res) => setContent(res.data.results))
+      ["then"]((res) => {
+        setContent(res.data.results);
+        editLoading(false);
+      })
       ["catch"]((err) => console.log(`err:${err}`));
     // console.log("check rendering [watching]");
   }, [en, includingVideo]);

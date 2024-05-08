@@ -10,18 +10,25 @@ import { watchlistStyles } from "./watchlistStyles.ts";
 import tw from "../../lib/tailwind.js";
 import watchList_store from "../../zustand/watchList_store.js";
 import axios from "axios";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useLayoutEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 import selectedContent_store from "../../zustand/selectedContent_store.js";
+import loading_store from "../../zustand/loading_store.js";
 const { width } = Dimensions.get("window");
 export default function WatchList() {
   let { watchList } = watchList_store((state) => state);
   // main states
   let [content, setContent]: any = useState([]);
+  const { editLoading } = loading_store((state) => state);
   //
   const BASE_URL = "https://api.themoviedb.org/3/discover/";
-  useEffect(() => {
-    fetchData({ watchList, setContent, BASE_URL });
+  useLayoutEffect(() => {
+    const getData = async () => {
+      editLoading(true);
+      await fetchData({ watchList, setContent, BASE_URL });
+      editLoading(false);
+    };
+    getData();
   }, [watchList]);
   return (
     <>
