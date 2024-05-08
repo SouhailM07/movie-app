@@ -1,1 +1,1 @@
-export const favoritelistStyles={}
+export const favoritelistStyles = {};

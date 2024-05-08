@@ -1,14 +1,15 @@
+import { globalStyles } from "../../globalStyles.ts";
 import { Text, View, Switch, Pressable } from "react-native";
 import { sidebarStyles } from "./sidebarStyles.ts";
 import tw from "../../lib/tailwind.js";
-import { globalStyles } from "../../globalStyles.ts";
+// ? types
+import { arrOfOptions_t } from "../../types/index.ts";
+// zustand stores
 import filters_store from "../../zustand/filters_store.js";
 
-interface arrOfOptions_t {
-  label: string;
-  st: boolean;
-  editSt: any;
-}
+/*===============================================================================================*/
+// main component section
+/*===============================================================================================*/
 
 export default function Sidebar() {
   // main vars
@@ -36,6 +37,10 @@ export default function Sidebar() {
   );
 }
 
+/*===============================================================================================*/
+// small components section
+/*===============================================================================================*/
+
 const Option = ({ label, st, editSt }: arrOfOptions_t) => {
   // ! handlers
   const handlePress = () => {
@@ -44,7 +49,7 @@ const Option = ({ label, st, editSt }: arrOfOptions_t) => {
   return (
     <Pressable
       onPress={handlePress}
-      style={tw`flex-row justify-between items-center w-full `}
+      style={tw`${sidebarStyles.optionPressable}`}
     >
       <Text style={tw`text-white font-medium text-[1rem] `}>{label}</Text>
       <Switch

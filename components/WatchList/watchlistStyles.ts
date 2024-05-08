@@ -1,1 +1,1 @@
-export const watchlistStyles={}
+export const watchlistStyles = {};

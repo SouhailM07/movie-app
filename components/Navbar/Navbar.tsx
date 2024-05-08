@@ -9,6 +9,11 @@ import {
   faCompactDisc,
 } from "@fortawesome/free-solid-svg-icons";
 
+/*===============================================================================================*/
+// main component section
+/*===============================================================================================*/
+// * this is a header for the home route
+
 export default function Navbar() {
   // main vars
   const icons_color: string = "white";

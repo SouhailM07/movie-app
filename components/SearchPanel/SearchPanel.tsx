@@ -16,6 +16,7 @@ import tw from "../../lib/tailwind.js";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
+// zustand stores
 import selectedContent_store from "../../zustand/selectedContent_store.js";
 import searchResults_store from "../../zustand/searchResults_store.js";
 // assets
@@ -30,11 +31,11 @@ const { width } = Dimensions.get("window");
 
 export default function SearchPanel() {
   // main vars
+  const BASE_URL = "https://api.themoviedb.org/3/discover/";
   let [searchTxt, setSearchTxt] = useState<string>("");
   let { searchResults, editSearchResults } = searchResults_store(
     (state) => state
   );
-  const BASE_URL = "https://api.themoviedb.org/3/discover/";
   //
   useEffect(() => {
     fetchData({ searchTxt, editSearchResults, BASE_URL });
@@ -55,11 +56,7 @@ export default function SearchPanel() {
             }}
           />
         ) : (
-          <Text
-            style={tw`text-white text-center mt-[5rem] text-[1rem] font-medium`}
-          >
-            Empty
-          </Text>
+          <Text style={tw`${searchpanelStyles.emptyTextStyle}`}>Empty</Text>
         )}
       </SafeAreaView>
     </>
@@ -75,10 +72,9 @@ const SearchInput = ({ txt, editTxt }) => {
   let navigation: any = useNavigation();
   // handlers
   const handlePress = () => txt && navigation.navigate("searchResults");
+  //
   return (
-    <View
-      style={tw` border-2 h-[2.8rem] my-[1rem] border-gray-300 w-[90%] mx-auto rounded-full flex-row justify-between items-center `}
-    >
+    <View style={tw`${searchpanelStyles.searchInputContainer}`}>
       <TextInput
         style={tw`text-white h-full w-[80%] pl-[1rem] `}
         value={txt}
@@ -88,7 +84,7 @@ const SearchInput = ({ txt, editTxt }) => {
         onPress={handlePress}
         style={tw` w-[20%] border-white items-center justify-center`}
       >
-        <FontAwesomeIcon icon={faSearch} color="white" />
+        <FontAwesomeIcon icon={faSearch} color="white" size={22} />
       </TouchableOpacity>
     </View>
   );
@@ -125,7 +121,7 @@ const RendedItem = ({ watch }) => {
 };
 
 /*===============================================================================================*/
-// helpers section
+// ! main handlers
 /*===============================================================================================*/
 
 const fetchData = async ({ searchTxt, BASE_URL, editSearchResults }) => {

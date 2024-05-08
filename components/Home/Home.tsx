@@ -2,6 +2,8 @@ import { SafeAreaView, ScrollView } from "react-native";
 import { homeStyles } from "./homeStyles.ts";
 import tw from "../../lib/tailwind.js";
 import { createDrawerNavigator } from "@react-navigation/drawer";
+// ? types
+import { globalStyles } from "../../globalStyles.ts";
 // components
 import Watching from "../Watching/Watching.tsx";
 import Navbar from "../Navbar/Navbar.tsx";
@@ -33,9 +35,9 @@ let MainHome = () => {
     { title: "Upcoming", apiUrl: "movie/upcoming" },
   ];
   return (
-    <SafeAreaView style={tw`min-h-full w-full bg-slate-800`}>
+    <SafeAreaView style={tw`${globalStyles.safe_area_container}`}>
       <ScrollView
-        contentContainerStyle={tw`pt-[2rem] pb-[4rem]  gap-y-[1.4rem]`}
+        contentContainerStyle={tw`pt-[2rem] pb-[4rem] gap-y-[1.4rem]`}
         style={tw`min-h-full`}
       >
         {arr.map((e, i) => {

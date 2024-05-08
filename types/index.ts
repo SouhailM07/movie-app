@@ -8,6 +8,18 @@ export interface onboardingPages_t {
   loop: boolean;
 }
 
+export interface arrOfOptions_t {
+  label: string;
+  st: boolean;
+  editSt: any;
+}
+
+export interface bottomNavRoutes_t {
+  name: string;
+  options: { title: string; headerShown: boolean };
+  component: () => React.JSX.Element;
+}
+
 export interface btnsPanel_t {
   icon: IconDefinition;
   label: string;

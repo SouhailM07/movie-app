@@ -14,17 +14,12 @@ import {
   faHome,
   faSearch,
 } from "@fortawesome/free-solid-svg-icons";
+import { bottomNavRoutes_t } from "../../types/index.ts";
 
 const Tab = createBottomTabNavigator();
 
 export default function BottomNavbar() {
-  interface bottomNavRoutes_t {
-    name: string;
-    options: { title: string; headerShown: boolean };
-    component: () => React.JSX.Element;
-  }
   const bottomNavRoutes: bottomNavRoutes_t[] = [
-    // { title: e.title, headerShown: e.showHeader }
     {
       name: "home",
       component: Home,

@@ -10,8 +10,10 @@ import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import { useNavigation } from "@react-navigation/native";
 import onboarding_store from "../../zustand/onboarding_store.js";
 import { useEffect } from "react";
+
 // main vars
 const { width } = Dimensions.get("window");
+// pages array
 const onboardingPages: onboardingPages_t[] = [
   {
     backgroundColor: "rgb(30 41 59)",
@@ -41,13 +43,15 @@ const onboardingPages: onboardingPages_t[] = [
 /*===============================================================================================*/
 
 export default function MyOnboarding() {
+  // main vars
   const navigation: any = useNavigation();
   let { editWelcomed } = onboarding_store((state) => state);
+  let { welcomed } = onboarding_store((state) => state);
+  // handlers
   const handleDone = () => {
     editWelcomed(true);
     navigation.navigate("tabsHome");
   };
-  let { welcomed } = onboarding_store((state) => state);
   useEffect(() => {
     if (welcomed) {
       navigation.navigate("tabsHome");
@@ -78,6 +82,10 @@ export default function MyOnboarding() {
     </>
   );
 }
+
+/*===============================================================================================*/
+// small components section
+/*===============================================================================================*/
 
 const DoneButton = ({ h }) => {
   return (

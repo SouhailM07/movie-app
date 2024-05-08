@@ -36,6 +36,7 @@ import {
 export default function SelectedContent() {
   // main vars
   let { selectedContent } = selectedContent_store((state) => state);
+  const { loading, editLoading } = loading_store((state) => state);
   let [contentApi, setContentApi]: any = useState({});
   const {
     backdrop_path,
@@ -50,18 +51,8 @@ export default function SelectedContent() {
     id,
   } = contentApi;
   //
-  const { loading, editLoading } = loading_store((state) => state);
   useLayoutEffect(() => {
-    editLoading(true);
-    axios
-      .get(
-        `https://api.themoviedb.org/3/movie/${selectedContent}?include_adult=false?&api_key=${process.env.EXPO_PUBLIC_API_KEY}`
-      )
-      .then((res) => {
-        setContentApi(res.data);
-        editLoading(false);
-      })
-      .catch((err) => console.log(`err:${err}`));
+    getDate({ setContentApi, selectedContent, editLoading });
   }, []);
   return (
     <>
@@ -165,13 +156,11 @@ const ContentTrailerBtn = () => {
 };
 
 const ContentBtnsPanel = ({ contentId }) => {
-  // ! handlers
+  // main vars
   let { watchList, updateWatchList } = watchList_store((state) => state);
   let { favoriteList, updateFavoriteList } = favoriteList_store(
     (state) => state
   );
-
-  //
   const btnsPanel: btnsPanel_t[] = [
     { icon: faPlay, label: "play", color: "#4ADE80", handler: () => {} },
     {
@@ -188,6 +177,7 @@ const ContentBtnsPanel = ({ contentId }) => {
       handler: updateFavoriteList,
     },
   ];
+  //
   return (
     <View style={tw`${selectedcontentStyles.ContentBtnsPanel_container}`}>
       {btnsPanel.map(({ icon, label, color, handler }, i) => (
@@ -204,4 +194,21 @@ const ContentBtnsPanel = ({ contentId }) => {
       ))}
     </View>
   );
+};
+
+/*==============================================================================================*/
+// ! global handlers
+/*==============================================================================================*/
+
+const getDate = ({ editLoading, setContentApi, selectedContent }) => {
+  editLoading(true);
+  axios
+    .get(
+      `https://api.themoviedb.org/3/movie/${selectedContent}?include_adult=false?&api_key=${process.env.EXPO_PUBLIC_API_KEY}`
+    )
+    .then((res) => {
+      setContentApi(res.data);
+      editLoading(false);
+    })
+    .catch((err) => console.log(`err:${err}`));
 };
